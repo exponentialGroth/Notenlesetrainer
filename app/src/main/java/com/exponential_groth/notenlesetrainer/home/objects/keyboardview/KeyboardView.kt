@@ -55,8 +55,8 @@ class KeyboardView(context: Context, attrs: AttributeSet?, defStyleAttr: Int, de
             invalidate()
         }
 
-    private var selectedKeyLeft = 31
-    private var selectedKeyRight = 55
+    private var selectedKeyLeft = 32
+    private var selectedKeyRight = 54
 
     private var c1Marker: Pair<Bitmap, Pair<Float, Float>>? = null
     private val numOfWhiteKeys get() = getNumOfWhiteKeys(minKey, maxKey)

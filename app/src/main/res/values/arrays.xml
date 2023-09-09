@@ -10,8 +10,8 @@
     </string-array>
 
     <array name="keyboard_slider_initial_values">
-        <item>31</item>
-        <item>55</item>
+        <item>19</item>
+        <item>32</item>
     </array>
     <!-- Reply Preference -->
     <string-array name="reply_entries">

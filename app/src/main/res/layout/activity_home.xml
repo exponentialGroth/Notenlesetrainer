@@ -106,7 +106,7 @@
         app:layout_constraintBottom_toTopOf="@id/home_keyboard"
         android:layout_marginBottom="12dp"
         android:valueFrom="1"
-        android:valueTo="88"
+        android:valueTo="52"
         android:stepSize="1"
         app:values="@array/keyboard_slider_initial_values"
         app:labelBehavior="gone" />

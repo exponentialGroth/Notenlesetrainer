@@ -64,18 +64,30 @@ fun Int.toPositionInBlackKeyGroup(): Position {
     }
 }
 
+
 /**
- * returns the key number of the key which is the this-th key of its color
+ * Returns the key number of the key which is the this-th white key.
  * */
-fun Int.toKeyNum(leftKey: Int, rightKey: Int, keyColor: KeyColor): Int {
-    var n = 0
-    for (k in leftKey..rightKey) {
-        if (k.toKeyColor() == keyColor) n++
-        if (n == this) {
-            return k
-        }
+fun Int.toKeyNum(): Int = this + 5*((this-1)/7) + when (this % 7) {
+    1 -> 0
+    2 -> 1
+    3 -> 1
+    4 -> 2
+    5 -> 3
+    6 -> 3
+    0 -> 4
+    else -> throw Exception()
+}
+
+fun Int.toWhiteKeyNum(): Int {
+    val whiteKey = this - if (this.toKeyColor() == KeyColor.BLACK) 1 else 0
+    return whiteKey - 5*((whiteKey-1)/12) - when (whiteKey % 12) {
+        3, 4 -> 1
+        6 -> 2
+        8, 9 -> 3
+        11 -> 4
+        else -> 0
     }
-    throw Exception("such key does not exist")
 }
 
 operator fun Rect.contains(pos: Pair<Float, Float>): Boolean =

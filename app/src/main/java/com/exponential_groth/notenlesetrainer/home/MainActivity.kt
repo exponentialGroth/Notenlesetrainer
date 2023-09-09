@@ -11,6 +11,7 @@ import android.view.WindowInsets
 import android.view.WindowManager
 import android.widget.ImageButton
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
@@ -40,8 +41,8 @@ class MainActivity: AppCompatActivity() {
     private var screenWidth = 0
     private var level = 1
     private var key = 0
-    private val minTone get() = keyBoardSlider.values[0].toInt()
-    private val maxTone get() = keyBoardSlider.values[1].toInt()
+    private val minTone get() = keyBoardSlider.values[0].toInt().toKeyNum()
+    private val maxTone get() = keyBoardSlider.values[1].toInt().toKeyNum()
 
     private lateinit var playBtn: ImageButton
     private lateinit var practiceBtn: ImageButton
@@ -135,7 +136,7 @@ class MainActivity: AppCompatActivity() {
             keyRV.scrollToPosition(key + 6)
             levelPicker.value = level.toFloat()
             levelDescriptionTV.text = levelDescriptions[level-1]
-            keyBoardSlider.setValues(leftTone.toFloat(), rightTone.toFloat())
+            keyBoardSlider.setValues(leftTone.toWhiteKeyNum().toFloat(), rightTone.toWhiteKeyNum().toFloat())
             keyboardView.key = key
             keyboardView.noAdditionalAccidentals = level == 1
             keyboardView.updateSelectedKeys(leftTone, rightTone)
@@ -160,6 +161,10 @@ class MainActivity: AppCompatActivity() {
 
     private fun setUpUI() {
         val startListener = OnClickListener {
+            if (minTone == maxTone) {
+                Toast.makeText(this, getString(R.string.error_select_more_tones), Toast.LENGTH_SHORT).show()
+                return@OnClickListener
+            }
             val intent = Intent(this, GameActivity::class.java)
                 .putExtra(EXTRA_KEY_KEY, key)
                 .putExtra(EXTRA_KEY_DIFFICULTY, level)
@@ -192,22 +197,10 @@ class MainActivity: AppCompatActivity() {
         }
 
 
-//        TODO("maybe valueTo=52, no steps for black keys")
         keyBoardSlider.addOnChangeListener { slider, value, fromUser ->
             slider.values.let {values ->
-                if (value.toInt().toKeyColor() == KeyColor.BLACK) {
-                    values.indexOfFirst { it != value }.takeUnless { it == -1 }?.let {
-                        if (slider.values[it] > value) {
-                            slider.values[it] = value + 1
-                        } else {
-                            slider.values[it] = value - 1
-                        }
-                    }
-                } else {
-                    keyboardView.updateSelectedKeys(values[0].toInt(), values[1].toInt())
-                    updateHighScoreView()
-                }
-
+                keyboardView.updateSelectedKeys(values[0].toInt().toKeyNum(), values[1].toInt().toKeyNum())
+                updateHighScoreView()
             }
         }
 
