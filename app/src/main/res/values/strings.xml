@@ -1,0 +1,33 @@
+<resources>
+    <string name="app_name">Notenlesetrainer</string>
+    <string name="play">Play</string>
+    <string name="level">Level %1$d</string>
+    <string name="level_1_description">
+        Keine Vorzeichen
+    </string>
+    <string name="level_2_description">
+        Einige Vorzeichen
+    </string>
+    <string name="level_3_description">
+        Einige Vorzeichen, darunter doppelte
+    </string>
+    <string name="level_4_description">
+        Viele Vorzeichen
+    </string>
+    <string name="level_5_description">
+        Viele Vorzeichen, darunter doppelte
+    </string>
+    <string name="level_6_description">
+        Sehr viele Vorzeichen, darunter doppelte
+    </string>
+    <string name="high_score">Highscore</string>
+    <string name="title_activity_settings">Einstellungen</string>
+
+    <!-- Preference Titles -->
+    <string name="rhythmless_header">Rhythmenloses Spiel</string>
+    <string name="rhythmless_speed_title">Animationsgeschwindigkeit</string>
+
+    <!-- Preference summaries -->
+    <string name="rhythmless_summary">%1$d</string>
+
+</resources>

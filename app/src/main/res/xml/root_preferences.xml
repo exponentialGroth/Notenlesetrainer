@@ -1,0 +1,15 @@
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory app:title="@string/rhythmless_header">
+
+        <SeekBarPreference
+            app:key="rhythmless_animation_speed"
+            app:title="Animationsgeschwindigkeit"
+            app:defaultValue="20"
+            app:min="1"
+            android:max="100"
+            />
+
+    </PreferenceCategory>
+</PreferenceScreen>

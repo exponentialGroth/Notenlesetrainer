@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".game.GameActivity">
+
+    <com.google.android.material.materialswitch.MaterialSwitch
+        android:id="@+id/home_rhythm_switch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/home_key_rv"
+        app:layout_constraintStart_toStartOf="@id/home_key_rv"
+        app:layout_constraintEnd_toEndOf="@id/home_key_rv"
+        android:checked="true"
+        style="@style/Widget.App.Switch"/>
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/home_key_rv"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toStartOf="@id/verticalGuideline60"
+        app:layout_constraintStart_toEndOf="@id/verticalGuideline40"
+        app:layout_constraintTop_toBottomOf="@id/horizontalGuideline15"
+        app:layoutManager=".home.objects.circleoffifths.CircleOfFifthsLayoutManager"
+        tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        tools:orientation="horizontal"
+        tools:listitem="@layout/circle_of_fifths_item"
+        android:contentDescription="Tonart auswählen"/>
+
+
+
+    <TextView
+        android:id="@+id/home_level_title_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/home_key_rv"
+        app:layout_constraintBottom_toTopOf="@id/horizontalGuideline15"
+        tools:text="Level 1"/>
+
+
+    <com.google.android.material.slider.Slider
+        android:id="@+id/home_level_picker"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/horizontalGuideline15"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/home_key_rv"
+        android:layout_marginHorizontal="24dp"
+        android:valueTo="6"
+        android:valueFrom="1"
+        android:stepSize="1"
+        android:value="1"
+        app:labelBehavior="gone"/>
+
+    <TextView
+        android:id="@+id/home_level_description_tv"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/home_level_picker"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/home_key_rv"
+        android:layout_marginTop="12dp"
+        android:layout_marginHorizontal="24dp"
+        android:maxLines="3"
+        android:text="@string/level_1_description"
+        android:textAlignment="center"/>
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/home_key_rv"
+        app:layout_constraintBottom_toTopOf="@id/horizontalGuideline15"
+        android:text="@string/high_score"/>
+
+
+    <TextView
+        android:id="@+id/home_high_score_notes_played_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toStartOf="@id/home_high_score_date_tv"
+        app:layout_constraintStart_toEndOf="@id/home_key_rv"
+        app:layout_constraintTop_toBottomOf="@id/horizontalGuideline15" />
+
+    <TextView
+        android:id="@+id/home_high_score_date_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/home_high_score_notes_played_tv"
+        app:layout_constraintTop_toBottomOf="@id/horizontalGuideline15" />
+
+
+    <com.google.android.material.slider.RangeSlider
+        android:id="@+id/home_keyboard_slider"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@id/home_keyboard"
+        app:layout_constraintEnd_toEndOf="@id/home_keyboard"
+        app:layout_constraintBottom_toTopOf="@id/home_keyboard"
+        android:layout_marginBottom="12dp"
+        android:valueFrom="1"
+        android:valueTo="88"
+        android:stepSize="1"
+        app:values="@array/keyboard_slider_initial_values"
+        app:labelBehavior="gone" />
+
+    <com.exponential_groth.notenlesetrainer.home.objects.keyboardview.KeyboardView
+        android:id="@+id/home_keyboard"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginHorizontal="136dp"
+        android:layout_marginBottom="24dp"
+        />
+
+
+
+    <ImageButton
+        android:id="@+id/home_practice_btn"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_marginBottom="12dp"
+        android:contentDescription="@string/play"
+        android:src="@drawable/baseline_play_lesson_24"
+        android:scaleType="fitXY"
+        android:padding="16dp"
+        android:background="@drawable/round_background"
+        app:layout_constraintStart_toStartOf="@id/home_play_btn"
+        app:layout_constraintBottom_toTopOf="@id/home_play_btn"
+        app:layout_constraintEnd_toEndOf="@id/home_play_btn" />
+
+    <ImageButton
+        android:id="@+id/home_play_btn"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_marginBottom="48dp"
+        android:contentDescription="@string/play"
+        android:src="@drawable/baseline_play_arrow_24"
+        android:scaleType="fitXY"
+        android:padding="12dp"
+        android:background="@drawable/round_background"
+        android:backgroundTint="@color/design_default_color_secondary"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/home_keyboard"/>
+
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:id="@+id/home_settings_btn"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_marginBottom="48dp"
+        android:contentDescription="@string/play"
+        android:src="@drawable/baseline_settings_24"
+        android:tint="?colorTertiary"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/home_keyboard"/>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/horizontalGuideline15"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.15" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/horizontalGuideline85"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.85" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/verticalGuideline40"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.4" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/verticalGuideline60"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.6" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
