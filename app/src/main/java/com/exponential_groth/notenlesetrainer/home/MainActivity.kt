@@ -128,7 +128,8 @@ class MainActivity: AppCompatActivity() {
         }
 
         intent.extras?.let {
-            key = it.getInt(EXTRA_KEY_KEY)
+            key = it.getInt(EXTRA_KEY_KEY, Int.MAX_VALUE)
+            if (key == Int.MAX_VALUE) return@let
             level = it.getInt(EXTRA_KEY_DIFFICULTY, 1)
             val leftTone = it.getInt(EXTRA_KEY_MIN_TONE)
             val rightTone = it.getInt(EXTRA_KEY_MAX_TONE)
