@@ -7,7 +7,7 @@ import com.exponential_groth.notenlesetrainer.util.toKeyColor
 import kotlin.math.abs
 import kotlin.random.Random
 
-class NoteGenerator(difficulty: Int, minTone: Int, maxTone: Int, val key: Int, private val barLength: Int, val FPS: Int, val withRhythm: Boolean = true) {
+class NoteGenerator(difficulty: Int, minTone: Int, maxTone: Int, val key: Int, private val barLength: Int, val withRhythm: Boolean = true) {
 
 
     private val accidentalPositionsFromKey = when (key) {
@@ -43,7 +43,7 @@ class NoteGenerator(difficulty: Int, minTone: Int, maxTone: Int, val key: Int, p
 
     fun nextNote(): MusicNote {
         val tone = possibleTones[Random.nextInt(possibleTones.size)]
-        val note = MusicNote(tone, FPS, withRhythm).apply {
+        val note = MusicNote(tone, withRhythm).apply {
             whiteToneWithoutAccidental = tone - (accidentalOnTone(tone)?.value?:0)
         }
         val accidentalOnTone = accidentalOnTone(tone)

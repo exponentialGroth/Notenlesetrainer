@@ -51,7 +51,7 @@ abstract class SheetMusic(val context: Context, val dimensions: Pair<Int, Int>, 
     protected var widthTravelled = 0f
     var notesPlayed = 0
 
-    protected val noteGenerator = NoteGenerator(difficulty, minNote, maxNote, key, BAR_LENGTH, FPS, withRhythm)
+    protected val noteGenerator = NoteGenerator(difficulty, minNote, maxNote, key, BAR_LENGTH, withRhythm)
 
     init {
         val clefDrawable = getClefByKey(key)
@@ -88,6 +88,7 @@ abstract class SheetMusic(val context: Context, val dimensions: Pair<Int, Int>, 
         noteHeight = noteDrawable.intrinsicHeight * noteScale
         noteBitmap = noteDrawable.toBitmap((noteScale * noteDrawable.intrinsicWidth).toInt(), noteHeight.toInt())
         reversedNoteBitmap = Bitmap.createBitmap(noteBitmap, 0, 0, noteBitmap.width, noteBitmap.height, Matrix().apply { postRotate(180f) }, true)
+        initNotes()
 
         val accidentalDrawables = listOf(R.drawable.double_flat, R.drawable.flat, R.drawable.natural, R.drawable.sharp, R.drawable.double_sharp).map { AppCompatResources.getDrawable(context, it)!! }
         accidentalBitmaps = listOf(
@@ -129,6 +130,11 @@ abstract class SheetMusic(val context: Context, val dimensions: Pair<Int, Int>, 
     }
 
     abstract fun updateNotes()
+
+    private fun initNotes() {
+        MusicNote.width = noteBitmap.width / staffWidth
+        MusicNote.FPS = FPS
+    }
 
     open fun update(clickedKeys: List<Int>) {
         correctClicks.clear()

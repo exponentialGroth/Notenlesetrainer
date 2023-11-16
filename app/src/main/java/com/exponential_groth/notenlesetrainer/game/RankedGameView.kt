@@ -40,8 +40,7 @@ class RankedGameView(context: Context, val dimensions: Pair<Int, Int>, min: Int,
 
     private var frames = 0
 
-
-    private var countDownPaint = Paint().apply {
+    private val countDownPaint = Paint().apply {
         style = Paint.Style.FILL
         isAntiAlias = true
         color = Color.BLUE
