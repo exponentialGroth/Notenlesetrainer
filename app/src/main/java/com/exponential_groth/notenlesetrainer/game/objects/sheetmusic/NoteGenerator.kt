@@ -8,8 +8,6 @@ import kotlin.math.abs
 import kotlin.random.Random
 
 class NoteGenerator(difficulty: Int, minTone: Int, maxTone: Int, val key: Int, private val barLength: Int, val withRhythm: Boolean = true) {
-
-
     private val accidentalPositionsFromKey = when (key) {
         in 1..7 -> listOf(9, 4, 11, 6, 1, 8, 3).subList(0, key)
         in -7..-1 -> listOf(3, 8, 1, 6, 11, 4, 9).subList(0, -key)

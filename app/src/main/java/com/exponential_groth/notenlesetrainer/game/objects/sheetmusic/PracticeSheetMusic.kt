@@ -9,9 +9,8 @@ class PracticeSheetMusic(context: Context, dimensions: Pair<Int, Int>, minNote: 
     minNote,
     maxNote, key, difficulty, FPS
 ) {
-
-    val gapsTravelled get() = widthTravelled * NOTES_PER_LINE
-    var speed = 0.05f
+    private val gapsTravelled get() = widthTravelled * NOTES_PER_LINE
+    private var speed = 0.05f
 
     init {
         repeat(NOTES_PER_LINE) {

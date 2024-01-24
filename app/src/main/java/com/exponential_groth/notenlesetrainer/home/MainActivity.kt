@@ -1,5 +1,6 @@
 package com.exponential_groth.notenlesetrainer.home
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Build
@@ -12,6 +13,7 @@ import android.view.WindowManager
 import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.addCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
@@ -32,6 +34,7 @@ import com.exponential_groth.notenlesetrainer.util.*
 import com.google.android.material.materialswitch.MaterialSwitch
 import com.google.android.material.slider.RangeSlider
 import com.google.android.material.slider.Slider
+import com.google.android.material.snackbar.Snackbar
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 
@@ -56,6 +59,7 @@ class MainActivity: AppCompatActivity() {
     private lateinit var keyboardView: KeyboardView
     private lateinit var keyBoardSlider: RangeSlider
     private lateinit var rhythmSwitch: MaterialSwitch
+    private lateinit var leaveSnackBar: Snackbar
 
     private lateinit var levelDescriptions: Array<String>
     private val fifths = mutableListOf<CircleOfFifthsItem>()
@@ -70,10 +74,22 @@ class MainActivity: AppCompatActivity() {
         levelDescriptions = resources.getStringArray(R.array.level_descriptions)
         viewModel.loadHighScores()
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            onBackPressedDispatcher.addCallback(this) {
+                leaveSnackBar.show()
+            }
+        }
     }
 
+    @SuppressLint("MissingSuperCall")
     @Deprecated("Deprecated in Java")
-    override fun onBackPressed() {}
+    override fun onBackPressed() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            super.onBackPressed()  // to execute the added callback
+        } else {
+            leaveSnackBar.show()
+        }
+    }
 
     override fun onStart() {
         super.onStart()
@@ -124,6 +140,7 @@ class MainActivity: AppCompatActivity() {
             keyboardView = findViewById(R.id.home_keyboard)
             keyBoardSlider = findViewById(R.id.home_keyboard_slider)
             rhythmSwitch = findViewById(R.id.home_rhythm_switch)
+            makeSnackBar()
             setUpUI()
         }
 
@@ -154,7 +171,6 @@ class MainActivity: AppCompatActivity() {
                     rhythmSwitch.isChecked
                 )
             }
-
         }?: run { keyRV.scrollToPosition(6) }
 
         observe()
@@ -236,6 +252,13 @@ class MainActivity: AppCompatActivity() {
         fifths.addAll(drawables.map { CircleOfFifthsItem(it) })
         circleOfFifthsAdapter.notifyItemRangeInserted(0, 13)
         keyRV.scrollToPosition(key + 6)
+    }
+
+    private fun makeSnackBar() {
+        leaveSnackBar = Snackbar.make(playBtn, R.string.leave_app, Snackbar.LENGTH_LONG)
+            .setAction(R.string.confirm) {
+                finishAffinity()
+            }
     }
 
 

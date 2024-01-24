@@ -1,8 +1,14 @@
 package com.exponential_groth.notenlesetrainer.game
 
+import android.content.Context
 import android.graphics.Canvas
+import android.view.SurfaceView
+import com.exponential_groth.notenlesetrainer.util.OnFinishedListener
 
-interface GameView {
-    fun update()
-    fun drawGameView(canvas: Canvas?)
+abstract class GameView(context: Context): SurfaceView(context) {
+    var onFinishedListener: OnFinishedListener? = null
+
+    abstract fun getPoints(): Int
+    abstract fun update()
+    abstract fun drawGameView(canvas: Canvas?)
 }

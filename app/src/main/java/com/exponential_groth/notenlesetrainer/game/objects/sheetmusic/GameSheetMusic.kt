@@ -13,9 +13,9 @@ class GameSheetMusic(context: Context, dimensions: Pair<Int, Int>, minNote: Int,
     private var text: SheetMusicText? = null
     private val textPaint = newLevelTextPaint.apply { textSize = clefHeight / 2 }
 
-    val gapsTravelled get() = widthTravelled * NOTES_PER_LINE
-    val levelAtTheRight get() = 1 + (gapsTravelled.toInt() + NOTES_PER_LINE) / (NOTES_PER_LEVEL + (GAP_BETWEEN_LEVELS * NOTES_PER_LINE).toInt())
-    val speedAtTheRight get() = 0.075f + (levelAtTheRight - 1) * 0.025f
+    private val gapsTravelled get() = widthTravelled * NOTES_PER_LINE
+    private val levelAtTheRight get() = 1 + (gapsTravelled.toInt() + NOTES_PER_LINE) / (NOTES_PER_LEVEL + (GAP_BETWEEN_LEVELS * NOTES_PER_LINE).toInt())
+    private val speedAtTheRight get() = 0.075f + (levelAtTheRight - 1) * 0.025f
 
     init {
         repeat(NOTES_PER_LINE) {
@@ -47,7 +47,6 @@ class GameSheetMusic(context: Context, dimensions: Pair<Int, Int>, minNote: Int,
             }
     }
 
-
     override fun update(clickedKeys: List<Int>) {
         super.update(clickedKeys)
 
@@ -64,7 +63,6 @@ class GameSheetMusic(context: Context, dimensions: Pair<Int, Int>, minNote: Int,
             canvas.drawText(it.text, staffLeft + it.x * staffWidth, clefTop + 0.5f*clefHeight, textPaint)
         }
     }
-
 
     private fun addNote() = notes.add(
         noteGenerator.nextNote().apply {

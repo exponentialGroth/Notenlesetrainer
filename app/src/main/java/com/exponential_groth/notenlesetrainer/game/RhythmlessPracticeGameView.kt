@@ -4,7 +4,6 @@ import android.content.Context
 import android.graphics.Canvas
 import android.view.MotionEvent
 import android.view.SurfaceHolder
-import android.view.SurfaceView
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.graphics.drawable.toBitmap
 import com.exponential_groth.notenlesetrainer.R
@@ -14,14 +13,12 @@ import com.exponential_groth.notenlesetrainer.game.objects.scoreboard.AVAILABLE_
 import com.exponential_groth.notenlesetrainer.game.objects.scoreboard.PracticeScoreboard
 import com.exponential_groth.notenlesetrainer.game.objects.sheetmusic.RhythmlessSheetMusic
 import com.exponential_groth.notenlesetrainer.util.KeyColor
-import com.exponential_groth.notenlesetrainer.util.OnFinishedListener
 import com.exponential_groth.notenlesetrainer.util.contains
 import com.exponential_groth.notenlesetrainer.util.toKeyColor
 
-class RhythmlessPracticeGameView(context: Context, val dimensions: Pair<Int, Int>, min: Int, max: Int, key: Int, difficulty: Int, fps: Int, animSpeed: Float): SurfaceView(context), SurfaceHolder.Callback, GameView {
+class RhythmlessPracticeGameView(context: Context, val dimensions: Pair<Int, Int>, min: Int, max: Int, key: Int, difficulty: Int, fps: Int, animSpeed: Float): SurfaceHolder.Callback, GameView(context) {
     constructor(context: Context): this(context, Pair(1920, 1080), 33, 61, 0, 1,30, 0.2f)
 
-    var onFinishedListener: OnFinishedListener? = null
 
     private val thread: GameThread
     private val keyboard = Keyboard(
@@ -75,6 +72,10 @@ class RhythmlessPracticeGameView(context: Context, val dimensions: Pair<Int, Int
 
             v?.onTouchEvent(event)?: true
         }
+    }
+
+    override fun getPoints(): Int {
+        return scoreboard.correctNotesPlayed
     }
 
 

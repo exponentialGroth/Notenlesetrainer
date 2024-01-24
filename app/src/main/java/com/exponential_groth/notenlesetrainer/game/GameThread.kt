@@ -4,7 +4,6 @@ import android.graphics.Canvas
 import android.view.SurfaceHolder
 
 class GameThread(private val gameView: GameView, private val surfaceHolder: SurfaceHolder, private val FPS: Int): Thread() {
-
     var running = false
 
     override fun run() {

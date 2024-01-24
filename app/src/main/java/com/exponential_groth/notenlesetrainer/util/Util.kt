@@ -2,9 +2,6 @@ package com.exponential_groth.notenlesetrainer.util
 
 import android.graphics.Rect
 import java.time.LocalDate
-import kotlin.math.pow
-
-fun Int.toFrequency() = 2f.pow((this-49f)/12) * 440
 
 fun Int.toKeyColor() = if (this % 12 in listOf(0, 2, 5, 7, 10)) KeyColor.BLACK else KeyColor.WHITE
 
@@ -95,10 +92,9 @@ operator fun Rect.contains(pos: Pair<Float, Float>): Boolean =
             pos.second.toInt() in top..bottom
 
 
-fun LocalDate.toInt() = year * 10000 + month.value * 100 + dayOfMonth
-
+/**
+ * Extracts LocalDate from hashcode
+ */
 fun Int.toLocalDate(): LocalDate {
-    val dayOfMonth = this % 100
-    val monthValue = ((this - dayOfMonth) % 10000) / 100
-    return LocalDate.of((this - monthValue * 100 - dayOfMonth) / 10000, monthValue, dayOfMonth)
+    return LocalDate.of(this and -0x800 ushr 11, this ushr 6 and 0xF, this and 0x3F)
 }

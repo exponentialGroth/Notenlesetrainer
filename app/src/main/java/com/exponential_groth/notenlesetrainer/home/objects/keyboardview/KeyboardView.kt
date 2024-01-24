@@ -65,7 +65,6 @@ class KeyboardView(context: Context, attrs: AttributeSet?, defStyleAttr: Int, de
 
     private var insetForHighlighting = 0f
 
-
     private val selectedKeyPaint = Paint().apply { colorFilter = PorterDuffColorFilter(context.getColor(R.color.teal_200), PorterDuff.Mode.SRC_IN) }
 
     init {
@@ -77,8 +76,6 @@ class KeyboardView(context: Context, attrs: AttributeSet?, defStyleAttr: Int, de
                 recycle()
             }
         }
-
-
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {

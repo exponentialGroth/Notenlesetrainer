@@ -9,10 +9,9 @@ class RhythmlessSheetMusic(context: Context, dimensions: Pair<Int, Int>, minNote
     minNote,
     maxNote, key, difficulty, FPS, false
 ) {
-
-    val gapsTravelled get() = widthTravelled * NOTES_PER_LINE
-    var speed = 0f
-    var gapsToStopMovingAt = Float.MAX_VALUE
+    private val gapsTravelled get() = widthTravelled * NOTES_PER_LINE
+    private var speed = 0f
+    private var gapsToStopMovingAt = Float.MAX_VALUE
 
     init {
         repeat(NOTES_PER_LINE) {

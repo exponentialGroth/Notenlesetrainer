@@ -7,18 +7,14 @@ import kotlin.math.min
 class Keyboard(val leftKey: Int, val rightKey: Int, val dimensions: Pair<Int, Int>) {
 
     val keys = getKeys()
-
     val rect = Rect(
         keys.first().rect.left,
         keys.first().rect.top,
         keys.last().rect.right,
         keys.first { it.color == KeyColor.WHITE }.rect.bottom
     )
-
     private val marker = getMarker()
-
     private var hasAdditionalKeyLeft = false
-
 
 
     fun update(correctClicks: List<Int>, wrongClicks: List<Int>) {
@@ -52,7 +48,6 @@ class Keyboard(val leftKey: Int, val rightKey: Int, val dimensions: Pair<Int, In
         marker.draw(canvas)
     }
 
-
     fun onClick(pos: Pair<Float, Float>): Int? {
         keys.find { pos in it.rect }?.let {key ->
             if (key.color == KeyColor.BLACK) {
@@ -67,11 +62,8 @@ class Keyboard(val leftKey: Int, val rightKey: Int, val dimensions: Pair<Int, In
     }
 
 
-
-
     @JvmName("getKeyList")
     private fun getKeys(): List<Key> {
-
         val numOfWhiteKeys = getNumOfWhiteKeys(leftKey, rightKey)
 
         val bestWhiteHeight = (1- TOP_MARGIN - BOTTOM_MARGIN) * dimensions.second

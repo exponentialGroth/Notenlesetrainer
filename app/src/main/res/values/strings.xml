@@ -23,6 +23,8 @@
     <string name="high_score">Highscore</string>
     <string name="title_activity_settings">Einstellungen</string>
 
+    <string name="leave_app">Sicher, dass Du die App verlassen willst?</string>
+    <string name="confirm">Bestätigen</string>
     <!-- Error messages -->
     <string name="error_select_more_tones">Wähle einen größeren Tonumfang aus!</string>
 

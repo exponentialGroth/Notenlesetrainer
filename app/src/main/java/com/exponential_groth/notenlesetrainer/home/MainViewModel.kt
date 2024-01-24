@@ -5,12 +5,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.exponential_groth.notenlesetrainer.data.Repository
 import com.exponential_groth.notenlesetrainer.data.local.HighScore
-import com.exponential_groth.notenlesetrainer.util.toInt
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 
 class MainViewModel(private val repository: Repository): ViewModel() {
-
     val highScores = MutableLiveData<List<HighScore>>()
 
     fun loadHighScores() {
@@ -26,7 +24,7 @@ class MainViewModel(private val repository: Repository): ViewModel() {
             val oldHighScoreValue = oldHighScore?.hsNotesPlayed
             if (oldHighScoreValue == null || notes >= oldHighScoreValue) {
                 val newHighScore = HighScore(
-                    notes, LocalDate.now().toInt(), minTone, maxTone, key, level, isWithRhythm
+                    notes, LocalDate.now().hashCode(), minTone, maxTone, key, level, isWithRhythm
                 )
                 repository.addHighScore(newHighScore)
 
@@ -39,6 +37,4 @@ class MainViewModel(private val repository: Repository): ViewModel() {
             }
         }
     }
-
-
 }

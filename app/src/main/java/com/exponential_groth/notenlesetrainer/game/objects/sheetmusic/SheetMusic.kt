@@ -49,7 +49,7 @@ abstract class SheetMusic(val context: Context, val dimensions: Pair<Int, Int>, 
     private val hasShield get() = widthTravelled - widthAtLastLifeLoss < 0.5 / NOTES_PER_LINE
 
     protected var widthTravelled = 0f
-    var notesPlayed = 0
+    private var notesPlayed = 0
 
     protected val noteGenerator = NoteGenerator(difficulty, minNote, maxNote, key, BAR_LENGTH, withRhythm)
 
@@ -121,7 +121,6 @@ abstract class SheetMusic(val context: Context, val dimensions: Pair<Int, Int>, 
                 )
             })
         }
-
 
         barLineWidth = BAR_LINE_WIDTH * staffWidth
         barLineTop = staff[0].top.toFloat()

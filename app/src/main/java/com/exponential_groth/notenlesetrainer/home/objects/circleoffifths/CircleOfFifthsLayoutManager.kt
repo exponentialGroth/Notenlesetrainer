@@ -7,7 +7,7 @@ import com.exponential_groth.notenlesetrainer.util.OnItemSelectedListener
 import kotlin.math.abs
 
 class CircleOfFifthsLayoutManager(context: Context?): LinearLayoutManager(context) {
-    constructor(): this(null)
+    constructor(): this(null) // for xml preview
 
     private lateinit var recyclerView: RecyclerView
     var onItemSelectedListener: OnItemSelectedListener? = null

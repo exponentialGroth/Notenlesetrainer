@@ -14,7 +14,6 @@ import com.exponential_groth.notenlesetrainer.util.OnFinishedListener
 
 
 class GameActivity : Activity() {
-
     private var key = 0
     private var difficulty = 0
     private var minTone = 1
@@ -23,15 +22,22 @@ class GameActivity : Activity() {
     private var withRhythm = false
     private var rhythmlessAnimSpeed = 0.2f
 
+    private var gameView: GameView? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         requestWindowFeature(Window.FEATURE_NO_TITLE)
     }
 
-
     override fun onStart() {
         super.onStart()
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            onBackInvokedDispatcher.registerOnBackInvokedCallback(1) {
+                gameView?.onFinishedListener?.finish()
+            }
+        }
+
         @Suppress("DEPRECATION")
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             window.insetsController?.apply {
@@ -75,63 +81,43 @@ class GameActivity : Activity() {
             rhythmlessAnimSpeed = it.getInt(EXTRA_KEY_RHYTHMLESS_ANIM_SPEED, 20) * 0.01f
         }
 
-
-        if (!withRhythm && isPractice) {
-            setContentView(RhythmlessPracticeGameView(this, dimensions, minTone, maxTone, key, difficulty, FPS, rhythmlessAnimSpeed).apply {
-                onFinishedListener = OnFinishedListener {
-                    val intent = Intent(context, MainActivity::class.java)
-                    intent.putExtra(EXTRA_KEY_NOTES, scoreboard.correctNotesPlayed)
-                    intent.putExtra(EXTRA_KEY_KEY, key)
-                    intent.putExtra(EXTRA_KEY_DIFFICULTY, difficulty)
-                    intent.putExtra(EXTRA_KEY_MIN_TONE, minTone)
-                    intent.putExtra(EXTRA_KEY_MAX_TONE, maxTone)
-                    intent.putExtra(EXTRA_KEY_IS_PRACTICE, true)
-                    intent.putExtra(EXTRA_KEY_IS_WITH_RHYTHM, false)
-                    startActivity(intent)
-                }
-            })
+        gameView = (if (!withRhythm && isPractice) {
+            RhythmlessPracticeGameView(this, dimensions, minTone, maxTone, key, difficulty, FPS, rhythmlessAnimSpeed)
         } else if (!withRhythm) {
-            setContentView(RhythmlessGameView(this, dimensions, minTone, maxTone, key, difficulty, FPS, rhythmlessAnimSpeed).apply {
-                onFinishedListener = OnFinishedListener {
-                    val intent = Intent(context, MainActivity::class.java)
-                    intent.putExtra(EXTRA_KEY_NOTES, scoreboard.notesPlayed)
-                    intent.putExtra(EXTRA_KEY_KEY, key)
-                    intent.putExtra(EXTRA_KEY_DIFFICULTY, difficulty)
-                    intent.putExtra(EXTRA_KEY_MIN_TONE, minTone)
-                    intent.putExtra(EXTRA_KEY_MAX_TONE, maxTone)
-                    intent.putExtra(EXTRA_KEY_IS_PRACTICE, false)
-                    intent.putExtra(EXTRA_KEY_IS_WITH_RHYTHM, false)
-                    startActivity(intent)
-                }
-            })
+            RhythmlessGameView(this, dimensions, minTone, maxTone, key, difficulty, FPS, rhythmlessAnimSpeed)
         } else if (isPractice) {
-            setContentView(PracticeGameView(this, dimensions, minTone, maxTone, key, difficulty, FPS).apply {
-                onFinishedListener = OnFinishedListener {
-                    val intent = Intent(context, MainActivity::class.java)
-                    intent.putExtra(EXTRA_KEY_NOTES, scoreboard.correctNotesPlayed)
-                    intent.putExtra(EXTRA_KEY_KEY, key)
-                    intent.putExtra(EXTRA_KEY_DIFFICULTY, difficulty)
-                    intent.putExtra(EXTRA_KEY_MIN_TONE, minTone)
-                    intent.putExtra(EXTRA_KEY_MAX_TONE, maxTone)
-                    intent.putExtra(EXTRA_KEY_IS_PRACTICE, true)
-                    intent.putExtra(EXTRA_KEY_IS_WITH_RHYTHM, true)
-                    startActivity(intent)
-                }
-            })
+            PracticeGameView(this, dimensions, minTone, maxTone, key, difficulty, FPS)
         } else {
-            setContentView(RankedGameView(this, dimensions, minTone, maxTone, key, difficulty, FPS).apply {
-                onFinishedListener = OnFinishedListener {
-                    val intent = Intent(context, MainActivity::class.java)
-                    intent.putExtra(EXTRA_KEY_NOTES, scoreboard.notesPlayed)
-                    intent.putExtra(EXTRA_KEY_KEY, key)
-                    intent.putExtra(EXTRA_KEY_DIFFICULTY, difficulty)
-                    intent.putExtra(EXTRA_KEY_MIN_TONE, minTone)
-                    intent.putExtra(EXTRA_KEY_MAX_TONE, maxTone)
-                    intent.putExtra(EXTRA_KEY_IS_PRACTICE, false)
-                    intent.putExtra(EXTRA_KEY_IS_WITH_RHYTHM, true)
-                    startActivity(intent)
-                }
-            })
+            RankedGameView(this, dimensions, minTone, maxTone, key, difficulty, FPS)
+        }).also {
+            it.onFinishedListener = getOnFinishGame(it)
         }
+        setContentView(gameView!!)
+    }
+
+
+    @Deprecated("Deprecated in Java")
+    override fun onBackPressed() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+            gameView?.onFinishedListener?.finish()
+        }
+        super.onBackPressed()
+    }
+
+
+    private fun putExtras(intent: Intent, gV: GameView) {
+        intent.putExtra(EXTRA_KEY_NOTES, gV.getPoints())
+        intent.putExtra(EXTRA_KEY_KEY, key)
+        intent.putExtra(EXTRA_KEY_DIFFICULTY, difficulty)
+        intent.putExtra(EXTRA_KEY_MIN_TONE, minTone)
+        intent.putExtra(EXTRA_KEY_MAX_TONE, maxTone)
+        intent.putExtra(EXTRA_KEY_IS_PRACTICE, isPractice)
+        intent.putExtra(EXTRA_KEY_IS_WITH_RHYTHM, withRhythm)
+    }
+
+    private fun getOnFinishGame(gV: GameView) = OnFinishedListener {
+        val intent = Intent(gV.context, MainActivity::class.java)
+        putExtras(intent, gV)
+        startActivity(intent)
     }
 }
