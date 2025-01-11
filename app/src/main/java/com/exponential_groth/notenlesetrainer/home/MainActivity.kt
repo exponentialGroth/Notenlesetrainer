@@ -144,12 +144,11 @@ class MainActivity: AppCompatActivity() {
             setUpUI()
         }
 
-        intent.extras?.let {
-            key = it.getInt(EXTRA_KEY_KEY, Int.MAX_VALUE)
-            if (key == Int.MAX_VALUE) return@let
-            level = it.getInt(EXTRA_KEY_DIFFICULTY, 1)
-            val leftTone = it.getInt(EXTRA_KEY_MIN_TONE)
-            val rightTone = it.getInt(EXTRA_KEY_MAX_TONE)
+        intent.extras?.let { extra ->
+            key = extra.getInt(EXTRA_KEY_KEY, -1).takeIf { it != -1 }?: return@let null
+            level = extra.getInt(EXTRA_KEY_DIFFICULTY, 1)
+            val leftTone = extra.getInt(EXTRA_KEY_MIN_TONE)
+            val rightTone = extra.getInt(EXTRA_KEY_MAX_TONE)
 
             keyRV.scrollToPosition(key + 6)
             levelPicker.value = level.toFloat()
@@ -158,12 +157,12 @@ class MainActivity: AppCompatActivity() {
             keyboardView.key = key
             keyboardView.noAdditionalAccidentals = level == 1
             keyboardView.updateSelectedKeys(leftTone, rightTone)
-            rhythmSwitch.isChecked = it.getBoolean(EXTRA_KEY_IS_WITH_RHYTHM)
+            rhythmSwitch.isChecked = extra.getBoolean(EXTRA_KEY_IS_WITH_RHYTHM)
 
-            val wasPractice = it.getBoolean(EXTRA_KEY_IS_PRACTICE)
+            val wasPractice = extra.getBoolean(EXTRA_KEY_IS_PRACTICE)
             if (!wasPractice) {
                 viewModel.updateHighScore(
-                    it.getInt(EXTRA_KEY_NOTES),
+                    extra.getInt(EXTRA_KEY_NOTES),
                     key,
                     level,
                     leftTone,
@@ -171,7 +170,8 @@ class MainActivity: AppCompatActivity() {
                     rhythmSwitch.isChecked
                 )
             }
-        }?: run { keyRV.scrollToPosition(6) }
+            1
+        } ?: run { keyRV.scrollToPosition(6) }  // should the other elements update as well?  or is this even needed?
 
         observe()
     }
