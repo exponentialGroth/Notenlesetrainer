@@ -37,6 +37,7 @@ import com.google.android.material.slider.Slider
 import com.google.android.material.snackbar.Snackbar
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
+import kotlin.math.min
 
 class MainActivity: AppCompatActivity() {
     private val viewModel: MainViewModel by viewModels { Injector.provideMainViewModelFactory(applicationContext) }
@@ -44,8 +45,8 @@ class MainActivity: AppCompatActivity() {
     private var screenWidth = 0
     private var level = 1
     private var key = 0
-    private val minTone get() = keyBoardSlider.values[0].toInt().toKeyNum()
-    private val maxTone get() = keyBoardSlider.values[1].toInt().toKeyNum()
+    private val minTone get() = keyboardView.selectedKeyLeft
+    private val maxTone get() = keyboardView.selectedKeyRight
 
     private lateinit var playBtn: ImageButton
     private lateinit var practiceBtn: ImageButton
@@ -178,7 +179,7 @@ class MainActivity: AppCompatActivity() {
 
     private fun setUpUI() {
         val startListener = OnClickListener {
-            if (minTone == maxTone) {
+            if (minTone == maxTone) {  // always false
                 Toast.makeText(this, getString(R.string.error_select_more_tones), Toast.LENGTH_SHORT).show()
                 return@OnClickListener
             }
@@ -215,10 +216,19 @@ class MainActivity: AppCompatActivity() {
 
 
         keyBoardSlider.addOnChangeListener { slider, value, fromUser ->
-            slider.values.let {values ->
-                keyboardView.updateSelectedKeys(values[0].toInt().toKeyNum(), values[1].toInt().toKeyNum())
-                updateHighScoreView()
+            val leftKeyNum = slider.values[0].toInt().toKeyNum()
+            val rightKeyNum = slider.values[1].toInt().toKeyNum()
+            if (leftKeyNum > minTone && leftKeyNum == rightKeyNum) {
+                slider.setValues(value-1, slider.values[1])
+                return@addOnChangeListener
             }
+            if (rightKeyNum < maxTone && leftKeyNum == rightKeyNum) {
+                slider.setValues(slider.values[0], value+1)
+                return@addOnChangeListener
+            }
+
+            keyboardView.updateSelectedKeys(leftKeyNum, rightKeyNum)
+            updateHighScoreView()
         }
 
         circleOfFifthsAdapter.recyclerView = keyRV
