@@ -5,12 +5,13 @@ import java.time.LocalDate
 
 fun Int.toKeyColor() = if (this % 12 in listOf(0, 2, 5, 7, 10)) KeyColor.BLACK else KeyColor.WHITE
 
-fun Int.toKeyName() = when (this % 12) {
-    4 -> if (this >= 28) "c" else "C"
-    else -> "͵,"
-} + if (this >= 40) ((this - 40) / 12 + 1).toString()
-else if (this <= 15)",".repeat((15 - this) / 12 + 1)
-else ""
+val noteNames = listOf('a', 'h', 'c', 'd', 'e', 'f', 'g')
+val sscripts = listOf('₂', '₁', '\u200C', '\u200C', '¹', '²', '³', '⁴', '⁵')
+fun Int.toKeyName(): String {
+    val whiteNote = this.toWhiteKeyNum()
+    return ("" + noteNames[(whiteNote-1) % 7].let { it.takeIf { this >= 28 }?: it.uppercase() }
+            + sscripts[(whiteNote+4)/7])
+}
 
 fun getPossibleTonesForDifficulty1(key: Int): List<Int> {
     val possibleTones = mutableListOf(1, 3, 4, 6, 8, 9, 11)
@@ -77,7 +78,7 @@ fun Int.toKeyNum(): Int = this + 5*((this-1)/7) + when (this % 7) {
 }
 
 fun Int.toWhiteKeyNum(): Int {
-    val whiteKey = this - if (this.toKeyColor() == KeyColor.BLACK) 1 else 0
+    val whiteKey = this.takeUnless { it.toKeyColor() == KeyColor.BLACK } ?: (this - 1)
     return whiteKey - 5*((whiteKey-1)/12) - when (whiteKey % 12) {
         3, 4 -> 1
         6 -> 2

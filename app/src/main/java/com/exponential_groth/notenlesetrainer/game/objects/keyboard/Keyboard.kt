@@ -128,13 +128,15 @@ class Keyboard(val leftKey: Int, val rightKey: Int, val dimensions: Pair<Int, In
         } else if ((leftKey..rightKey).any { it % 12 == 4 }) {
             keys.filter { it.keyNum % 12 == 4 }.let { it[it.size / 2] }
         } else {
-            keys[keys.size / 2]
+            keys[keys.size / 2].takeUnless { it.keyNum.toKeyColor() == KeyColor.BLACK } ?: keys[keys.size/2 - 1]
         }
 
         val keyHeightDifference = (keyToMark.rect.bottom - keyToMark.rect.top) * (1 - 1f / WHITE_BLACK_HEIGHT_PROPORTION)
         val size = keyHeightDifference / 2
+        val indexlessNotes = 16..<40
         return Marker(
-            keyToMark.rect.left + (keyToMark.rect.right - keyToMark.rect.left) * 0.1f,
+            keyToMark.rect.left + (keyToMark.rect.right - keyToMark.rect.left) *
+                    if (keyToMark.keyNum in indexlessNotes) .2f else .1f,
             keyToMark.rect.bottom - (keyHeightDifference - size) / 2,
             size,
             keyToMark.keyNum

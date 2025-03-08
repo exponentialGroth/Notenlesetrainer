@@ -1,7 +1,6 @@
 package com.exponential_groth.notenlesetrainer.home.objects.keyboardview
 
 import android.content.Context
-import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.PorterDuff
@@ -9,9 +8,8 @@ import android.graphics.PorterDuffColorFilter
 import android.graphics.Rect
 import android.util.AttributeSet
 import android.view.View
-import androidx.appcompat.content.res.AppCompatResources
-import androidx.core.graphics.drawable.toBitmap
 import com.exponential_groth.notenlesetrainer.R
+import com.exponential_groth.notenlesetrainer.game.objects.keyboard.Marker
 import com.exponential_groth.notenlesetrainer.util.KeyColor
 import com.exponential_groth.notenlesetrainer.util.Position
 import com.exponential_groth.notenlesetrainer.util.getNumOfWhiteKeys
@@ -58,7 +56,7 @@ class KeyboardView(context: Context, attrs: AttributeSet?, defStyleAttr: Int, de
     var selectedKeyLeft = 32
     var selectedKeyRight = 54
 
-    private var c1Marker: Pair<Bitmap, Pair<Float, Float>>? = null
+    private var c1Marker: Marker? = null // Pair<Bitmap, Pair<Float, Float>>? = null
     private val numOfWhiteKeys get() = getNumOfWhiteKeys(minKey, maxKey)
     private val hasAdditionalKeyLeft get() = minKey.toKeyColor() == KeyColor.WHITE && minKey % 12 !in listOf(4, 9)
     private var keys = emptyList<Key>()
@@ -120,9 +118,7 @@ class KeyboardView(context: Context, attrs: AttributeSet?, defStyleAttr: Int, de
             }
         }
 
-        c1Marker?.let {
-            canvas.drawBitmap(it.first, it.second.first, it.second.second, null)
-        }
+        c1Marker?.draw(canvas)
     }
 
 
@@ -211,20 +207,15 @@ class KeyboardView(context: Context, attrs: AttributeSet?, defStyleAttr: Int, de
 
         keys = createdKeys
 
-        val c1Drawable = AppCompatResources.getDrawable(context, R.drawable.c1)!!
-        val c1Key = keys.find { it.keyNum == 40 }!!
-        val maxW = (c1Key.rect.right - c1Key.rect.left) * .9f
-        val maxH = (c1Key.rect.bottom - c1Key.rect.top) * .9f
-        if (maxW / c1Drawable.intrinsicWidth * c1Drawable.intrinsicHeight <= maxH) {
-            val bm = c1Drawable.toBitmap(maxW.toInt(), (maxW / c1Drawable.intrinsicWidth * c1Drawable.intrinsicHeight).toInt(), null)
-            with(c1Key.rect) {
-                val pos = Pair(
-                    left + .5f * (right - left - maxW),
-                    blackBottom + .5f * (bottom - blackBottom - bm.height)
-                )
-                c1Marker = Pair(bm, pos)
-            }
-        }
+        val keyToMark = keys.find { it.keyNum == 40 }!!
+        val keyHeightDifference = (keyToMark.rect.bottom - keyToMark.rect.top) * (1 - 1f / WHITE_BLACK_HEIGHT_PROPORTION)
+        val size = keyHeightDifference / 2
+        c1Marker = Marker(
+            keyToMark.rect.left + (keyToMark.rect.right - keyToMark.rect.left) * 0.2f,
+            keyToMark.rect.bottom - (keyHeightDifference - size) / 2,
+            size,
+            keyToMark.keyNum
+        )
     }
 
 }
