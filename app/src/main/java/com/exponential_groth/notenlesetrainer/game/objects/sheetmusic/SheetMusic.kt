@@ -105,11 +105,11 @@ abstract class SheetMusic(val context: Context, val dimensions: Pair<Int, Int>, 
         lowestSupportedTone = 45.minusWhiteKeys((2 * (backGroundRect.bottom - staff.last().bottom) / staffStep).toInt())
         lowestSupportedToneWithOctaveDownSymbol = 45.minusWhiteKeys((2 * (backGroundRect.bottom - staff.last().bottom - octaveSymbolHeight) / staffStep).toInt())
         val neededOctaveDrawables = mutableListOf<Pair<Int, Int>>()
-        val numOfOctavesBelow = (lowestSupportedTone - minNote + 11) / 12
+        val numOfOctavesBelow = if (minNote >= lowestSupportedTone) 0 else (lowestSupportedToneWithOctaveDownSymbol - minNote + 11) / 12
         if (numOfOctavesBelow >= 1) neededOctaveDrawables.add(Pair(-1, R.drawable.octavedown))
         if (numOfOctavesBelow >= 2) neededOctaveDrawables.add(Pair(-2, R.drawable.twooctavesdown))
         if (numOfOctavesBelow >= 3) neededOctaveDrawables.add(Pair(-3, R.drawable.threeoctavesdown))
-        val numOfOctavesOnTop = (maxNote - highestSupportedTone + 11) / 12
+        val numOfOctavesOnTop = if (maxNote <= highestSupportedTone) 0 else (maxNote - highestSupportedToneWithOctaveUpSymbol + 11) / 12
         if (numOfOctavesOnTop >= 1) neededOctaveDrawables.add(Pair(1, R.drawable.octaveup))
         if (numOfOctavesOnTop >= 2) neededOctaveDrawables.add(Pair(2, R.drawable.twooctavesup))
 
@@ -163,7 +163,7 @@ abstract class SheetMusic(val context: Context, val dimensions: Pair<Int, Int>, 
         }
 
         if (notes.firstOrNull()?.shouldRemove == true) {
-            notes.removeFirst()
+            notes.removeAt(0)
             notesPlayed++
         }
 
@@ -173,7 +173,7 @@ abstract class SheetMusic(val context: Context, val dimensions: Pair<Int, Int>, 
 
         barLines.firstOrNull()?.let {
             if (it.cardinality == 1 && it.x + BAR_LINE_WIDTH / 2 < 0 || it.x + DOUBLE_BAR_LINE_MARGIN / 2 + BAR_LINE_WIDTH < 0) {
-                barLines.removeFirst()
+                barLines.removeAt(0)
             }
         }
 
