@@ -2,6 +2,8 @@ package com.exponential_groth.notenlesetrainer.game
 
 import android.app.Activity
 import android.content.Intent
+import android.media.AudioAttributes
+import android.media.SoundPool
 import android.os.Build
 import android.os.Bundle
 import android.util.DisplayMetrics
@@ -9,6 +11,7 @@ import android.view.View
 import android.view.Window
 import android.view.WindowInsets
 import android.view.WindowManager
+import com.exponential_groth.notenlesetrainer.data.sounds
 import com.exponential_groth.notenlesetrainer.home.*
 import com.exponential_groth.notenlesetrainer.util.OnFinishedListener
 
@@ -23,6 +26,16 @@ class GameActivity : Activity() {
     private var rhythmlessAnimSpeed = 0.2f
 
     private var gameView: GameView? = null
+    private var soundPool = SoundPool.Builder()
+        .setMaxStreams(1)
+        //.also { if (Build.VERSION.SDK_INT >= 34) it.setContext(this) }
+        .setAudioAttributes(AudioAttributes.Builder()
+            .setUsage(AudioAttributes.USAGE_GAME)
+            .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+            .also { if (Build.VERSION.SDK_INT >= 29) it.setFlags(AudioAttributes.ALLOW_CAPTURE_BY_ALL) }
+            .build())
+        .build()
+    private val soundIDs = IntArray(maxTone - minTone + 1)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -81,6 +94,10 @@ class GameActivity : Activity() {
             rhythmlessAnimSpeed = it.getInt(EXTRA_KEY_RHYTHMLESS_ANIM_SPEED, 20) * 0.01f
         }
 
+
+        for (note in minTone..maxTone)
+            soundIDs[note - minTone] = soundPool.load(this, sounds[note-1], 1)
+
         gameView = (if (!withRhythm && isPractice) {
             RhythmlessPracticeGameView(this, dimensions, minTone, maxTone, key, difficulty, FPS, rhythmlessAnimSpeed)
         } else if (!withRhythm) {
@@ -91,6 +108,10 @@ class GameActivity : Activity() {
             RankedGameView(this, dimensions, minTone, maxTone, key, difficulty, FPS)
         }).also {
             it.onFinishedListener = getOnFinishGame(it)
+            it.playNote = { note ->
+                if (note-minTone in soundIDs.indices)  // to prevent -1 when clicking the right half of the first black key
+                    soundPool.play(soundIDs[note - minTone], 1f, 1f, 1, 0, 1f)
+            }
         }
         setContentView(gameView!!)
     }

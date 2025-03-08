@@ -17,7 +17,7 @@ import com.exponential_groth.notenlesetrainer.util.contains
 import com.exponential_groth.notenlesetrainer.util.toKeyColor
 
 class RhythmlessGameView(context: Context, val dimensions: Pair<Int, Int>, min: Int, max: Int, key: Int, difficulty: Int, FPS: Int, animSpeed: Float): SurfaceHolder.Callback, GameView(context) {
-    constructor(context: Context): this(context, Pair(1920, 1080), 33, 61, 0, 1,30, 0.2f)
+    constructor(context: Context): this(context, Pair(1920, 1080), 33, 61, 0, 1, 30, 0.2f)
 
 
     private val thread: GameThread
@@ -60,6 +60,7 @@ class RhythmlessGameView(context: Context, val dimensions: Pair<Int, Int>, min: 
                     if (pos in keyboard.rect) {
                         keyboard.onClick(pos)?.let {
                             clickedKeys.add(it)
+                            playNote?.invoke(it)
                         }
                     } else {
                         clicks.add(pos)
