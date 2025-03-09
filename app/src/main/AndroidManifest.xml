@@ -16,6 +16,7 @@
         <activity
             android:name=".SettingsActivity"
             android:exported="false"
+            android:windowSoftInputMode="adjustResize"
             android:label="@string/title_activity_settings"
             android:theme="@style/Theme.AppCompat.DayNight.DarkActionBar"
             android:parentActivityName=".home.MainActivity"/>

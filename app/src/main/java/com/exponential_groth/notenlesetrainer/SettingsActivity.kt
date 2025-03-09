@@ -1,6 +1,7 @@
 package com.exponential_groth.notenlesetrainer
 
 import android.os.Bundle
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
@@ -11,6 +12,7 @@ class SettingsActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
         setContentView(R.layout.settings_activity)
         supportActionBar?.title = getString(R.string.title_activity_settings)
         if (savedInstanceState == null) {
